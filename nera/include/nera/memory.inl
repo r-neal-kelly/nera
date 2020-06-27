@@ -46,7 +46,7 @@ namespace nera {
                 return allocator.allocate(pointer, count * sizeof(data_t));
             }
         } else {
-            return false;
+            return free();
         }
     }
 

@@ -5,15 +5,15 @@
 
 namespace nera {
 
-    bool allocator_t::malloc(pointer_t<void>& pointer, size_t bytes)
+    bool allocator_t::malloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer.data || bytes == 0) {
+        if (pointer->data != nullptr || bytes == 0) {
             return false;
         } else {
             void* data = ::malloc(bytes);
             if (data) {
-                pointer.data = data;
-                pointer.bytes = bytes;
+                pointer->data = data;
+                pointer->bytes = bytes;
                 return true;
             } else {
                 return false;
@@ -21,15 +21,15 @@ namespace nera {
         }
     }
 
-    bool allocator_t::remalloc(pointer_t<void>& pointer, size_t bytes)
+    bool allocator_t::remalloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer.data == nullptr || bytes == 0) {
+        if (pointer->data == nullptr || bytes == 0) {
             return false;
         } else {
-            void* data = ::realloc(pointer.data, bytes);
+            void* data = ::realloc(pointer->data, bytes);
             if (data) {
-                pointer.data = data;
-                pointer.bytes = bytes;
+                pointer->data = data;
+                pointer->bytes = bytes;
                 return true;
             } else {
                 return false;
@@ -37,27 +37,27 @@ namespace nera {
         }
     }
 
-    bool allocator_t::demalloc(pointer_t<void>& pointer)
+    bool allocator_t::demalloc(pointer_t<void>* pointer)
     {
-        if (pointer.data == nullptr) {
+        if (pointer->data == nullptr) {
             return false;
         } else {
-            ::free(pointer.data);
-            pointer.data = nullptr;
-            pointer.bytes = 0;
+            ::free(pointer->data);
+            pointer->data = nullptr;
+            pointer->bytes = 0;
             return true;
         }
     }
 
-    bool allocator_t::calloc(pointer_t<void>& pointer, size_t bytes)
+    bool allocator_t::calloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer.data || bytes == 0) {
+        if (pointer->data != nullptr || bytes == 0) {
             return false;
         } else {
             void* data = ::calloc(bytes, sizeof(byte_t));
             if (data) {
-                pointer.data = data;
-                pointer.bytes = bytes;
+                pointer->data = data;
+                pointer->bytes = bytes;
                 return true;
             } else {
                 return false;
@@ -65,39 +65,38 @@ namespace nera {
         }
     }
 
-    bool allocator_t::recalloc(pointer_t<void>& pointer, size_t bytes)
+    bool allocator_t::recalloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer.data == nullptr || bytes == 0) {
+        if (pointer->data == nullptr || bytes == 0) {
             return false;
         } else {
-            void* data = ::realloc(pointer.data, bytes);
+            void* data = ::realloc(pointer->data, bytes);
             if (data) {
-                if (bytes > pointer.bytes) {
+                if (bytes > pointer->bytes) {
                     pointer_t<void> slice;
-                    slice.data = reinterpret_cast<byte_t*>(data) + pointer.bytes;
-                    slice.bytes = bytes - pointer.bytes;
+                    slice.data = reinterpret_cast<byte_t*>(data) + pointer->bytes;
+                    slice.bytes = bytes - pointer->bytes;
                     zero(slice);
                 }
-                pointer.data = data;
-                pointer.bytes = bytes;
+                pointer->data = data;
+                pointer->bytes = bytes;
                 return true;
-
             } else {
                 return false;
             }
         }
     }
 
-    bool allocator_t::decalloc(pointer_t<void>& pointer)
+    bool allocator_t::decalloc(pointer_t<void>* pointer)
     {
         return demalloc(pointer);
     }
 
-    bool allocator_t::zero(pointer_t<void>& pointer)
+    bool allocator_t::zero(pointer_t<void>* pointer)
     {
-        if (pointer.data != nullptr && pointer.bytes != 0) {
-            word_t* words = reinterpret_cast<word_t*>(pointer.data);
-            size_t bytes = pointer.bytes;
+        if (pointer->data != nullptr && pointer->bytes != 0) {
+            word_t* words = reinterpret_cast<word_t*>(pointer->data);
+            size_t bytes = pointer->bytes;
             while (bytes >= sizeof(word_t)) {
                 *words = 0;
                 words += 1;

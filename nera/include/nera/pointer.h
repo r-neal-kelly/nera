@@ -12,7 +12,8 @@ namespace nera {
         pointer_t(data_t* data, size_t bytes);
         ~pointer_t();
 
-        operator pointer_t<void>&();
+        operator pointer_t<void>* ();
+        operator void* ();
     };
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
-namespace regex {
+namespace nera { namespace regex {
 
 
 
-}
+}}

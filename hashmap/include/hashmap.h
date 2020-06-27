@@ -1,7 +1,7 @@
 #pragma once
 
-namespace hashmap {
+namespace nera { namespace hashmap {
 
 
 
-}
+}}

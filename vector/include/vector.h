@@ -1,7 +1,7 @@
 #pragma once
 
-namespace Vector {
+namespace nera { namespace vector {
 
 
 
-}
+}}

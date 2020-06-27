@@ -4,9 +4,35 @@
 
 namespace nera { namespace tests {
 
-    vector_t<int> Quick_Vector_Test()
+    void pointer()
     {
-        return vector_t<int>();
+        NERA_TEST("pointer_t default constructor:",
+                  {
+                         pointer_t<void> pointer;
+                         NERA_ASSERT(pointer.data == nullptr);
+                         NERA_ASSERT(pointer.bytes == 0);
+                  }
+        );
+
+        NERA_TEST("pointer_t user constructor:",
+                  {
+                         pointer_t<void> pointer(nullptr, 0);
+                         NERA_ASSERT(pointer.data == nullptr);
+                         NERA_ASSERT(pointer.bytes == 0);
+                  }
+        );
+    }
+
+    void allocator()
+    {
+    }
+
+    void memory()
+    {
+    }
+
+    void vector()
+    {
     }
 
 }}
@@ -15,9 +41,13 @@ int main()
 {
     using namespace nera;
 
-    vector_t<int> vector = tests::Quick_Vector_Test();
+    tests::pointer();
+    tests::allocator();
+    tests::memory();
+    tests::vector();
 
-    printf("success!");
+    printf("\nsuccess!\n");
+    getc(stdin);
 
     return 0;
 }

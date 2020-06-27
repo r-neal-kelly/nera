@@ -148,6 +148,7 @@
     <ClInclude Include="include\nera\regex.h" />
     <ClInclude Include="include\nera\string.h" />
     <ClInclude Include="include\nera\types.h" />
+    <ClInclude Include="include\nera\utils.h" />
     <ClInclude Include="include\nera\vector.h" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClCompile Include="src\hashmap.cpp" />
     <ClCompile Include="src\regex.cpp" />
     <ClCompile Include="src\string.cpp" />
+    <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\nera\memory.inl" />

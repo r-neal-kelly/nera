@@ -1,2 +1,0 @@
-C:\Code\C++\nera\x64\Debug\vector.pdb
-C:\Code\C++\nera\vector\x64\Debug\vector.pdb

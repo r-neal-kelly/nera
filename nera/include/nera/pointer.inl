@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nera/pointer.h"
+#include "nera/utils.h"
 
 namespace nera {
 
@@ -30,9 +31,15 @@ namespace nera {
     }
 
     template <typename data_t>
+    pointer_t<data_t>::operator data_t* ()
+    {
+        return &data;
+    }
+
+    template <typename data_t>
     pointer_t<data_t>::operator void* ()
     {
-        return reinterpret_cast<void*>(this);
+        return static_cast<void*>(data);
     }
 
 }

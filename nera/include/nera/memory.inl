@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nera/memory.h"
+#include "nera/utils.h"
 
 namespace nera {
 
@@ -41,11 +42,22 @@ namespace nera {
     {
         if (count > 0) {
             if (pointer.data != nullptr && pointer.bytes != 0) {
-                return allocator.reallocate(pointer, count * sizeof(data_t));
+                if (allocator.reallocate(pointer, count * sizeof(data_t))) {
+                    this->count = count;
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return allocator.allocate(pointer, count * sizeof(data_t));
+                if (allocator.allocate(pointer, count * sizeof(data_t))) {
+                    this->count = count;
+                    return true;
+                } else {
+                    return false;
+                }
             }
         } else {
+            // maybe shouldn't free like this?
             return free();
         }
     }
@@ -53,13 +65,19 @@ namespace nera {
     template <typename data_t>
     bool memory_t<data_t>::free()
     {
-        return allocator.deallocate(pointer);
+        if (allocator.deallocate(pointer)) {
+            this->count = 0;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     template <typename data_t>
-    bool memory_t<data_t>::zero()
+    data_t& memory_t<data_t>::operator [](size_t index)
     {
-        return allocator_t::zero(pointer);
+        NERA_ASSERT(index < count);
+        return pointer.data[index];
     }
 
 }

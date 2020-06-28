@@ -7,7 +7,7 @@ namespace nera {
 
     bool allocator_t::malloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer->data != nullptr || bytes == 0) {
+        if (pointer == nullptr || pointer->data != nullptr || bytes == 0) {
             return false;
         } else {
             void* data = ::malloc(bytes);
@@ -23,7 +23,7 @@ namespace nera {
 
     bool allocator_t::remalloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer->data == nullptr || bytes == 0) {
+        if (pointer == nullptr || pointer->data == nullptr || bytes == 0) {
             return false;
         } else {
             void* data = ::realloc(pointer->data, bytes);
@@ -39,7 +39,7 @@ namespace nera {
 
     bool allocator_t::demalloc(pointer_t<void>* pointer)
     {
-        if (pointer->data == nullptr) {
+        if (pointer == nullptr || pointer->data == nullptr) {
             return false;
         } else {
             ::free(pointer->data);
@@ -51,7 +51,7 @@ namespace nera {
 
     bool allocator_t::calloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer->data != nullptr || bytes == 0) {
+        if (pointer == nullptr || pointer->data != nullptr || bytes == 0) {
             return false;
         } else {
             void* data = ::calloc(bytes, sizeof(byte_t));
@@ -67,7 +67,7 @@ namespace nera {
 
     bool allocator_t::recalloc(pointer_t<void>* pointer, size_t bytes)
     {
-        if (pointer->data == nullptr || bytes == 0) {
+        if (pointer == nullptr || pointer->data == nullptr || bytes == 0) {
             return false;
         } else {
             void* data = ::realloc(pointer->data, bytes);
@@ -94,7 +94,9 @@ namespace nera {
 
     bool allocator_t::zero(pointer_t<void>* pointer)
     {
-        if (pointer->data != nullptr && pointer->bytes != 0) {
+        if (pointer == nullptr || pointer->data == nullptr || pointer->bytes == 0) {
+            return false;
+        } else {
             word_t* words = reinterpret_cast<word_t*>(pointer->data);
             size_t bytes = pointer->bytes;
             while (bytes >= sizeof(word_t)) {
@@ -109,8 +111,6 @@ namespace nera {
                 bytes -= sizeof(byte_t);
             }
             return true;
-        } else {
-            return false;
         }
     }
 

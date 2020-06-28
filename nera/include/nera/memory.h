@@ -10,6 +10,7 @@ namespace nera {
     public:
         pointer_t<data_t> pointer;
         const allocator_t& allocator;
+        size_t count = 0;
 
         memory_t();
         memory_t(size_t count);
@@ -19,7 +20,8 @@ namespace nera {
 
         bool hold(size_t count);
         bool free();
-        bool zero();
+
+        data_t& operator [](size_t index);
     };
 
 }

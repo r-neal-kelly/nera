@@ -4,9 +4,9 @@
 
 namespace nera {
 
-    typedef bool (*allocate_t)(pointer_t<void>* data, size_t bytes);
-    typedef bool (*reallocate_t)(pointer_t<void>* data, size_t bytes);
-    typedef bool (*deallocate_t)(pointer_t<void>* data);
+    typedef bool (*allocate_t)(pointer_t<void>* pointer, size_t bytes);
+    typedef bool (*reallocate_t)(pointer_t<void>* pointer, size_t bytes);
+    typedef bool (*deallocate_t)(pointer_t<void>* pointer);
 
     class allocator_t {
     public:

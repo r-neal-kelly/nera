@@ -60,13 +60,21 @@ namespace nera { namespace tests {
     {
         vector_t<int> ints(16, allocator_t::callocator());
 
+        for (size_t index = 0, count = ints.memory.count; index < count; index += 1) {
+            printf("%i", ints.memory[index]);
+        } printf("\n");
+
         ints.push(1);
         ints.push(2);
         ints.push(3);
 
+        for (size_t index = 0, count = ints.memory.count; index < count; index += 1) {
+            printf("%i", ints.memory[index]);
+        } printf("\n");
+
         for (size_t index = 0, count = ints.count; index < count; index += 1) {
             printf("%i", ints[index]);
-        }
+        } printf("\n");
     }
 
 }}

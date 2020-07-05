@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\nera\hasher.h" />
     <ClInclude Include="include\nera\allocator.h" />
     <ClInclude Include="include\nera\hashmap.h" />
     <ClInclude Include="include\nera\memory.h" />
@@ -154,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\allocator.cpp" />
+    <ClCompile Include="src\hasher.cpp" />
     <ClCompile Include="src\hashmap.cpp" />
     <ClCompile Include="src\pointer.cpp" />
     <ClCompile Include="src\regex.cpp" />
@@ -161,6 +163,7 @@
     <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\nera\hashmap.inl" />
     <None Include="include\nera\memory.inl" />
     <None Include="include\nera\pointer.inl" />
     <None Include="include\nera\vector.inl" />

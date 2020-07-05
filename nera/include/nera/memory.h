@@ -1,3 +1,7 @@
+/*
+    Copyright © 2020 r-neal-kelly, aka doticu
+*/
+
 #pragma once
 
 #include "nera/allocator.h"
@@ -15,7 +19,7 @@ namespace nera {
         memory_t();
         memory_t(size_t count);
         memory_t(const allocator_t& allocator);
-        memory_t(size_t count, const allocator_t& allocator);
+        memory_t(const allocator_t& allocator, size_t count);
         ~memory_t();
 
         bool hold(size_t count);

@@ -1,3 +1,7 @@
+/*
+    Copyright © 2020 r-neal-kelly, aka doticu
+*/
+
 #pragma once
 
 #include "nera/pointer.h"
@@ -33,7 +37,7 @@ namespace nera {
     template <typename data_t>
     pointer_t<data_t>::operator data_t* ()
     {
-        return &data;
+        return data;
     }
 
     template <typename data_t>

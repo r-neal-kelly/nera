@@ -1,12 +1,16 @@
+/*
+    Copyright © 2020 r-neal-kelly, aka doticu
+*/
+
 #pragma once
 
 #include "nera/pointer.h"
 
 namespace nera {
 
-    typedef bool (*allocate_t)(pointer_t<void>* pointer, size_t bytes);
-    typedef bool (*reallocate_t)(pointer_t<void>* pointer, size_t bytes);
-    typedef bool (*deallocate_t)(pointer_t<void>* pointer);
+    typedef bool (*allocate_f)(pointer_t<void>* pointer, size_t bytes);
+    typedef bool (*reallocate_f)(pointer_t<void>* pointer, size_t bytes);
+    typedef bool (*deallocate_f)(pointer_t<void>* pointer);
 
     class allocator_t {
     public:
@@ -24,12 +28,11 @@ namespace nera {
         static const allocator_t& callocator();
 
     public:
-        allocate_t allocate = nullptr;
-        reallocate_t reallocate = nullptr;
-        deallocate_t deallocate = nullptr;
+        const allocate_f allocate = nullptr;
+        const reallocate_f reallocate = nullptr;
+        const deallocate_f deallocate = nullptr;
 
-        allocator_t(allocate_t allocate, reallocate_t reallocate, deallocate_t deallocate);
-        ~allocator_t();
+        allocator_t(allocate_f allocate, reallocate_f reallocate, deallocate_f deallocate);
     };
 
 }

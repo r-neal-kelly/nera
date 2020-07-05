@@ -1,3 +1,7 @@
+/*
+    Copyright © 2020 r-neal-kelly, aka doticu
+*/
+
 #include "stdio.h"
 
 #include "main.h"
@@ -58,7 +62,7 @@ namespace nera { namespace tests {
 
     void vector()
     {
-        vector_t<int> ints(16, allocator_t::callocator());
+        vector_t<int> ints(allocator_t::callocator(), 16);
 
         for (size_t index = 0, count = ints.memory.count; index < count; index += 1) {
             printf("%i", ints.memory[index]);
@@ -77,6 +81,19 @@ namespace nera { namespace tests {
         } printf("\n");
     }
 
+    void hasher()
+    {
+        char letter = 'a';
+        pointer_t<char> pointer(&letter, sizeof(char));
+        hasher_t hasher = hasher_t::fnv_1a();
+        printf("hashed letter: %zu", hasher.hash(pointer));
+    }
+
+    void hashmap()
+    {
+        hashmap_t<char, int> hashmap;
+    }
+
 }}
 
 int main()
@@ -87,6 +104,8 @@ int main()
     tests::allocator();
     tests::memory();
     tests::vector();
+    tests::hasher();
+    tests::hashmap();
 
     printf("\nsuccess!\n");
     getc(stdin);

@@ -1,3 +1,7 @@
+/*
+    Copyright © 2020 r-neal-kelly, aka doticu
+*/
+
 #pragma once
 
 #include "nera/utils.h"
@@ -23,8 +27,8 @@ namespace nera {
     }
 
     template <typename data_t>
-    vector_t<data_t>::vector_t(size_t reserve_count, const allocator_t& allocator) :
-        memory(reserve_count, allocator)
+    vector_t<data_t>::vector_t(const allocator_t& allocator, size_t reserve_count) :
+        memory(allocator, reserve_count)
     {
     }
 
@@ -57,7 +61,8 @@ namespace nera {
     bool vector_t<data_t>::prepare()
     {
         if (count + 1 > memory.count) {
-            size_t new_reserve_count = static_cast<size_t>(memory.count * grow_rate);
+            size_t new_reserve_count =
+                static_cast<size_t>(static_cast<float>(memory.count) * grow_rate);
             if (new_reserve_count <= memory.count) {
                 new_reserve_count = memory.count + 1;
             }
@@ -82,11 +87,35 @@ namespace nera {
     }
 
     template <typename data_t>
-    bool vector_t<data_t>::push(data_t element)
+    bool vector_t<data_t>::push(data_t in_element)
     {
         if (prepare()) {
-            memory[count] = element;
+            memory[count] = in_element;
             count += 1;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    template <typename data_t>
+    bool vector_t<data_t>::push(data_t& in_element)
+    {
+        if (prepare()) {
+            memory[count] = in_element;
+            count += 1;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    template <typename data_t>
+    bool vector_t<data_t>::pull(data_t& out_element)
+    {
+        if (count > 0) {
+            count -= 1;
+            out_element = memory[count];
             return true;
         } else {
             return false;
@@ -98,18 +127,6 @@ namespace nera {
     {
         if (count > 0) {
             count -= 1;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    template <typename data_t>
-    bool vector_t<data_t>::pop(data_t& out_element)
-    {
-        if (count > 0) {
-            count -= 1;
-            out_element = memory[count];
             return true;
         } else {
             return false;

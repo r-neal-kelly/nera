@@ -1,3 +1,7 @@
+/*
+    Copyright © 2020 r-neal-kelly, aka doticu
+*/
+
 #include "stdlib.h"
 
 #include "nera/allocator.h"
@@ -126,16 +130,9 @@ namespace nera {
         return allocator;
     }
 
-    allocator_t::allocator_t(allocate_t allocate, reallocate_t reallocate, deallocate_t deallocate) :
+    allocator_t::allocator_t(allocate_f allocate, reallocate_f reallocate, deallocate_f deallocate) :
         allocate(allocate), reallocate(reallocate), deallocate(deallocate)
     {
-    }
-
-    allocator_t::~allocator_t()
-    {
-        allocate = nullptr;
-        reallocate = nullptr;
-        deallocate = nullptr;
     }
 
 }

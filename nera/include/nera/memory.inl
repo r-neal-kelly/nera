@@ -1,3 +1,7 @@
+/*
+    Copyright © 2020 r-neal-kelly, aka doticu
+*/
+
 #pragma once
 
 #include "nera/memory.h"
@@ -25,7 +29,7 @@ namespace nera {
     }
 
     template <typename data_t>
-    memory_t<data_t>::memory_t(size_t count, const allocator_t& allocator) :
+    memory_t<data_t>::memory_t(const allocator_t& allocator, size_t count) :
         allocator(allocator)
     {
         hold(count);

@@ -45,6 +45,9 @@
     <ClInclude Include="include\nera\hasher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\nera\tuple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hashmap.cpp">
@@ -62,9 +65,6 @@
     <ClCompile Include="src\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pointer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\hasher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,6 +80,12 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="include\nera\hashmap.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="include\nera\tuple.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="include\nera\hasher.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

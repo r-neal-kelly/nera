@@ -32,9 +32,16 @@ namespace nera {
         printf("Ok!\n");                \
     NERA_W
 
+    constexpr size_t MAX_SIZE_T = ~static_cast<size_t>(0);
+
     void assert(const char* assertion,
                 const char* function,
                 const char* file,
                 int line);
+
+    inline bool Is_Power_Of_Two(size_t word)
+    {
+        return word != 0 && !(word & (word - 1));
+    }
 
 }

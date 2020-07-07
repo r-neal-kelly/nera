@@ -16,9 +16,10 @@ namespace nera {
         pointer_t(data_t* data, size_t bytes);
         ~pointer_t();
 
+        size_t count();
+
         operator pointer_t<void>* ();
         operator data_t* ();
-        operator void* ();
     };
 
     template <>
@@ -32,8 +33,8 @@ namespace nera {
         ~pointer_t();
 
         operator pointer_t<void>* ();
-        operator void* ();
     };
+
 }
 
 #include "nera/pointer.inl"

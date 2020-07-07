@@ -11,9 +11,9 @@ namespace nera {
     template <typename data_t>
     class vector_t {
     public:
-        memory_t<data_t> memory;
-        float grow_rate = 1.7f;
+        auto_memory_t<data_t> memory;
         size_t count = 0;
+        float grow_rate = 1.7f;
 
         vector_t();
         vector_t(size_t reserve_count);
@@ -23,7 +23,7 @@ namespace nera {
 
         bool reserve(size_t count);
         bool energize(float grow_rate);
-        bool prepare();
+        bool grow();
         data_t& at(size_t index);
         data_t* point(size_t index);
         bool push(data_t in_element);
@@ -31,6 +31,7 @@ namespace nera {
         bool pull(data_t& out_element);
         bool pop();
         size_t find(data_t& element);
+        bool clone(vector_t<data_t>& out_vector);
 
         data_t& operator [](size_t index);
     };

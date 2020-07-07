@@ -149,6 +149,7 @@
     <ClInclude Include="include\nera\pointer.h" />
     <ClInclude Include="include\nera\regex.h" />
     <ClInclude Include="include\nera\string.h" />
+    <ClInclude Include="include\nera\tuple.h" />
     <ClInclude Include="include\nera\types.h" />
     <ClInclude Include="include\nera\utils.h" />
     <ClInclude Include="include\nera\vector.h" />
@@ -157,15 +158,16 @@
     <ClCompile Include="src\allocator.cpp" />
     <ClCompile Include="src\hasher.cpp" />
     <ClCompile Include="src\hashmap.cpp" />
-    <ClCompile Include="src\pointer.cpp" />
     <ClCompile Include="src\regex.cpp" />
     <ClCompile Include="src\string.cpp" />
     <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\nera\hasher.inl" />
     <None Include="include\nera\hashmap.inl" />
     <None Include="include\nera\memory.inl" />
     <None Include="include\nera\pointer.inl" />
+    <None Include="include\nera\tuple.inl" />
     <None Include="include\nera\vector.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

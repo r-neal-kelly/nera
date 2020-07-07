@@ -26,9 +26,4 @@ namespace nera {
         return hasher;
     }
 
-    hasher_t::hasher_t(hasher_f hash) :
-        hash(hash)
-    {
-    }
-
 }

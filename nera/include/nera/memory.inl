@@ -9,78 +9,117 @@
 
 namespace nera {
 
+    // manual_memory
+
     template <typename data_t>
-    memory_t<data_t>::memory_t() :
+    manual_memory_t<data_t>::manual_memory_t()
+    {
+    }
+
+    template <typename data_t>
+    manual_memory_t<data_t>::manual_memory_t(const allocator_t& allocator, size_t count)
+    {
+        hold(allocator, count);
+        NERA_ASSERT(pointer.data != nullptr && pointer.bytes != 0);
+    }
+
+    template <typename data_t>
+    manual_memory_t<data_t>::~manual_memory_t()
+    {
+        NERA_ASSERT(pointer.data == nullptr && pointer.bytes == 0);
+    }
+
+    template <typename data_t>
+    bool manual_memory_t<data_t>::hold(const allocator_t& allocator, size_t count)
+    {
+        if (count > 0) {
+            if (pointer.data != nullptr && pointer.bytes != 0) {
+                return allocator.reallocate(pointer, count * sizeof(data_t));
+            } else {
+                return allocator.allocate(pointer, count * sizeof(data_t));
+            }
+        } else {
+            return free(allocator);
+        }
+    }
+
+    template <typename data_t>
+    bool manual_memory_t<data_t>::free(const allocator_t& allocator)
+    {
+        return allocator.deallocate(pointer);
+    }
+
+    template <typename data_t>
+    size_t manual_memory_t<data_t>::count()
+    {
+        return pointer.count();
+    }
+
+    template <typename data_t>
+    data_t& manual_memory_t<data_t>::operator [](size_t index)
+    {
+        NERA_ASSERT(index < pointer.count());
+        return pointer.data[index];
+    }
+
+    // auto_memory
+
+    template <typename data_t>
+    auto_memory_t<data_t>::auto_memory_t() :
         allocator(allocator_t::mallocator())
     {
     }
 
     template <typename data_t>
-    memory_t<data_t>::memory_t(size_t count) :
-        allocator(allocator_t::mallocator())
-    {
-        hold(count);
-    }
-
-    template <typename data_t>
-    memory_t<data_t>::memory_t(const allocator_t& allocator) :
+    auto_memory_t<data_t>::auto_memory_t(const allocator_t& allocator) :
         allocator(allocator)
     {
     }
 
     template <typename data_t>
-    memory_t<data_t>::memory_t(const allocator_t& allocator, size_t count) :
+    auto_memory_t<data_t>::auto_memory_t(const allocator_t& allocator, size_t count) :
         allocator(allocator)
     {
         hold(count);
+        NERA_ASSERT(pointer.data != nullptr && pointer.bytes != 0);
     }
-
+    
     template <typename data_t>
-    memory_t<data_t>::~memory_t()
+    auto_memory_t<data_t>::~auto_memory_t()
     {
         free();
     }
 
     template <typename data_t>
-    bool memory_t<data_t>::hold(size_t count)
+    bool auto_memory_t<data_t>::hold(size_t count)
     {
         if (count > 0) {
             if (pointer.data != nullptr && pointer.bytes != 0) {
-                if (allocator.reallocate(pointer, count * sizeof(data_t))) {
-                    this->count = count;
-                    return true;
-                } else {
-                    return false;
-                }
+                return allocator.reallocate(pointer, count * sizeof(data_t));
             } else {
-                if (allocator.allocate(pointer, count * sizeof(data_t))) {
-                    this->count = count;
-                    return true;
-                } else {
-                    return false;
-                }
+                return allocator.allocate(pointer, count * sizeof(data_t));
             }
         } else {
-            // maybe shouldn't free like this?
             return free();
         }
     }
 
     template <typename data_t>
-    bool memory_t<data_t>::free()
+    bool auto_memory_t<data_t>::free()
     {
-        if (allocator.deallocate(pointer)) {
-            this->count = 0;
-            return true;
-        } else {
-            return false;
-        }
+        return allocator.deallocate(pointer);
     }
 
     template <typename data_t>
-    data_t& memory_t<data_t>::operator [](size_t index)
+    size_t auto_memory_t<data_t>::count()
     {
-        NERA_ASSERT(index < count);
+        return pointer.count();
+    }
+
+    template <typename data_t>
+    data_t& auto_memory_t<data_t>::operator [](size_t index)
+    {
+        NERA_ASSERT(index < pointer.count());
         return pointer.data[index];
     }
 

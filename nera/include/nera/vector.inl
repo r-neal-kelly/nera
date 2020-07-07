@@ -10,13 +10,14 @@
 namespace nera {
 
     template <typename data_t>
-    vector_t<data_t>::vector_t()
+    vector_t<data_t>::vector_t() :
+        memory(allocator_t::mallocator())
     {
     }
 
     template <typename data_t>
     vector_t<data_t>::vector_t(size_t reserve_count) :
-        memory(reserve_count)
+        memory(allocator_t::mallocator(), reserve_count)
     {
     }
 
@@ -36,14 +37,18 @@ namespace nera {
     vector_t<data_t>::~vector_t()
     {
         memory.free();
+        grow_rate = 1.7f;
         count = 0;
-        grow_rate = 0.0f;
     }
 
     template <typename data_t>
     bool vector_t<data_t>::reserve(size_t reserve_count)
     {
-        return memory.hold(reserve_count);
+        if (reserve_count > memory.count()) {
+            return memory.hold(reserve_count);
+        } else {
+            return false;
+        }
     }
 
     template <typename data_t>
@@ -58,18 +63,15 @@ namespace nera {
     }
 
     template <typename data_t>
-    bool vector_t<data_t>::prepare()
+    bool vector_t<data_t>::grow()
     {
-        if (count + 1 > memory.count) {
-            size_t new_reserve_count =
-                static_cast<size_t>(static_cast<float>(memory.count) * grow_rate);
-            if (new_reserve_count <= memory.count) {
-                new_reserve_count = memory.count + 1;
-            }
-            return memory.hold(new_reserve_count);
-        } else {
-            return true;
+        size_t memory_count = memory.count();
+        size_t new_reserve_count =
+            static_cast<size_t>(memory_count * static_cast<double>(grow_rate));
+        if (new_reserve_count <= memory_count) {
+            new_reserve_count = memory_count + 1;
         }
+        return memory.hold(new_reserve_count);
     }
 
     template <typename data_t>
@@ -89,7 +91,7 @@ namespace nera {
     template <typename data_t>
     bool vector_t<data_t>::push(data_t in_element)
     {
-        if (prepare()) {
+        if (count < memory.count() || grow()) {
             memory[count] = in_element;
             count += 1;
             return true;
@@ -101,7 +103,7 @@ namespace nera {
     template <typename data_t>
     bool vector_t<data_t>::push(data_t& in_element)
     {
-        if (prepare()) {
+        if (count < memory.count() || grow()) {
             memory[count] = in_element;
             count += 1;
             return true;
@@ -141,7 +143,7 @@ namespace nera {
                 return index;
             }
         }
-        return ~static_cast<size_t>(0);
+        return MAX_SIZE_T;
     }
 
     template <typename data_t>

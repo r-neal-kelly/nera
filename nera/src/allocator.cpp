@@ -120,18 +120,18 @@ namespace nera {
 
     const allocator_t& allocator_t::mallocator()
     {
-        static const allocator_t allocator(malloc, remalloc, demalloc);
+        static const allocator_t allocator(malloc, remalloc, demalloc, false);
         return allocator;
     }
 
     const allocator_t& allocator_t::callocator()
     {
-        static const allocator_t allocator(calloc, recalloc, decalloc);
+        static const allocator_t allocator(calloc, recalloc, decalloc, true);
         return allocator;
     }
 
-    allocator_t::allocator_t(allocate_f allocate, reallocate_f reallocate, deallocate_f deallocate) :
-        allocate(allocate), reallocate(reallocate), deallocate(deallocate)
+    allocator_t::allocator_t(allocate_f allocate, reallocate_f reallocate, deallocate_f deallocate, bool initializes_to_zero) :
+        allocate(allocate), reallocate(reallocate), deallocate(deallocate), initializes_to_zero(initializes_to_zero)
     {
     }
 

@@ -31,8 +31,9 @@ namespace nera {
         const allocate_f allocate = nullptr;
         const reallocate_f reallocate = nullptr;
         const deallocate_f deallocate = nullptr;
+        const bool initializes_to_zero = false;
 
-        allocator_t(allocate_f allocate, reallocate_f reallocate, deallocate_f deallocate);
+        allocator_t(allocate_f allocate, reallocate_f reallocate, deallocate_f deallocate, bool initializes_to_zero);
     };
 
 }

@@ -24,6 +24,12 @@ namespace nera {
     }
 
     template <typename data_t>
+    inline pointer_t<data_t>::pointer_t(data_t* data) :
+        data(data), bytes(sizeof(data_t))
+    {
+    }
+
+    template <typename data_t>
     inline pointer_t<data_t>::~pointer_t()
     {
         data = nullptr;

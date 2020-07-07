@@ -89,7 +89,7 @@ namespace nera {
     }
 
     template <typename data_t>
-    bool vector_t<data_t>::push(data_t in_element)
+    bool vector_t<data_t>::push(data_t& in_element)
     {
         if (count < memory.count() || grow()) {
             memory[count] = in_element;
@@ -101,15 +101,9 @@ namespace nera {
     }
 
     template <typename data_t>
-    bool vector_t<data_t>::push(data_t& in_element)
+    bool vector_t<data_t>::push(data_t&& in_element)
     {
-        if (count < memory.count() || grow()) {
-            memory[count] = in_element;
-            count += 1;
-            return true;
-        } else {
-            return false;
-        }
+        return push(in_element);
     }
 
     template <typename data_t>

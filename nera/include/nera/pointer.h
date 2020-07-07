@@ -14,6 +14,7 @@ namespace nera {
 
         pointer_t();
         pointer_t(data_t* data, size_t bytes);
+        pointer_t(data_t* data);
         ~pointer_t();
 
         size_t count();

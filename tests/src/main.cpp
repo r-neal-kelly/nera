@@ -132,6 +132,11 @@ namespace nera { namespace tests {
         hashmap2[3] = 'n';
 
         printf("%c%c%c%c\n", hashmap2[3], hashmap2[86], hashmap2[263], hashmap2[34]);
+
+        vector_t<tuple_t<int, char>> entries = hashmap2.entries();
+        for (size_t idx = 0, count = entries.count; idx < count; idx += 1) {
+            printf("%i:%c, ", entries[idx].first, entries[idx].second);
+        } printf("\n");
     }
 
 }}

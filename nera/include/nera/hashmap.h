@@ -12,9 +12,9 @@
 
 namespace nera {
 
-    // we use linear search instead of linked lists.
+    // we use linear search for collision instead of chained linked lists.
     // we use uint8_t for indices in consideration of speed/space tradeoff.
-    // the indices are searchable a word at a time, making larger maps more optimal.
+    // the indices may be searched a word at a time, making larger maps more optimal.
 
     template <typename key_t, typename value_t>
     class hashmap_t {
@@ -51,23 +51,29 @@ namespace nera {
         bool reserve(size_t bucket_count = DEFAULT_BUCKETS);
         bool energize(float grow_rate = DEFAULT_GROW_RATE, float threshold = DEFAULT_THRESHOLD);
         bool try_grow();
-        bool grow();
-        bool empty();
-
-        size_t bucket(key_t& key);
+        void grow();
+        void empty();
+        bool is_empty();
+        
+        size_t index_of(key_t& key);
+        size_t index_of_used(key_t& key);
         
         value_t& at(key_t& key);
         value_t& at(key_t&& key);
         value_t& operator [](key_t& key);
         value_t& operator [](key_t&& key);
+        bool erase(key_t& key);
+        bool erase(key_t&& key);
+        bool has_key(key_t& key);
+        bool has_key(key_t&& key);
 
-        bool erase(key_t key);
+        vector_t<key_t> keys(const allocator_t& allocator);
+        vector_t<value_t> values(const allocator_t& allocator);
+        vector_t<tuple_t<key_t, value_t>> entries(const allocator_t& allocator);
 
         vector_t<key_t> keys();
         vector_t<value_t> values();
         vector_t<tuple_t<key_t, value_t>> entries();
-        
-        bool contains(key_t& key);
     };
 
 }

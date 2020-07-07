@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include "nera/pointer.h"
 #include "nera/utils.h"
 
@@ -27,6 +29,36 @@ namespace nera {
     inline pointer_t<data_t>::pointer_t(data_t* data) :
         data(data), bytes(sizeof(data_t))
     {
+    }
+
+    template <typename data_t>
+    inline pointer_t<data_t>::pointer_t(const pointer_t<data_t>& to_copy) :
+        data(to_copy.data), bytes(to_copy.bytes)
+    {
+    }
+
+    template <typename data_t>
+    inline pointer_t<data_t>::pointer_t(pointer_t<data_t>&& to_move) :
+        data(std::exchange(to_move.data, nullptr)), bytes(std::exchange(to_move.bytes, 0))
+    {
+    }
+
+    template <typename data_t>
+    inline pointer_t<data_t>& pointer_t<data_t>::operator=(const pointer_t<data_t>& to_copy)
+    {
+        if (&to_copy != this) {
+            data = to_copy.data;
+            bytes = to_copy.bytes;
+        }
+        return *this;
+    }
+
+    template <typename data_t>
+    inline pointer_t<data_t>& pointer_t<data_t>::operator=(pointer_t<data_t>&& to_move)
+    {
+        data = std::exchange(to_move.data, nullptr);
+        bytes = std::exchange(to_move.bytes, 0);
+        return *this;
     }
 
     template <typename data_t>
@@ -63,6 +95,11 @@ namespace nera {
 
     inline pointer_t<void>::pointer_t(void* data, size_t bytes) :
         data(data), bytes(bytes)
+    {
+    }
+
+    inline pointer_t<void>::pointer_t(pointer_t<void>&& to_move) :
+        data(std::exchange(to_move.data, nullptr)), bytes(std::exchange(to_move.bytes, 0))
     {
     }
 

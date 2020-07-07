@@ -22,6 +22,7 @@ namespace nera {
         static bool recalloc(pointer_t<void>* pointer, size_t bytes);
         static bool decalloc(pointer_t<void>* pointer);
 
+        static bool copy(pointer_t<void>* from, pointer_t<void>* to);
         static bool zero(pointer_t<void>* pointer);
 
         static const allocator_t& mallocator();

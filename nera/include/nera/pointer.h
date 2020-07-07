@@ -15,6 +15,11 @@ namespace nera {
         pointer_t();
         pointer_t(data_t* data, size_t bytes);
         pointer_t(data_t* data);
+
+        pointer_t(const pointer_t<data_t>& to_copy);
+        pointer_t(pointer_t<data_t>&& to_move);
+        pointer_t<data_t>& operator=(const pointer_t<data_t>& to_copy);
+        pointer_t<data_t>& operator=(pointer_t<data_t>&& to_move);
         ~pointer_t();
 
         size_t count();
@@ -31,6 +36,7 @@ namespace nera {
 
         pointer_t();
         pointer_t(void* data, size_t bytes);
+        pointer_t(pointer_t<void>&& to_move);
         ~pointer_t();
 
         operator pointer_t<void>* ();

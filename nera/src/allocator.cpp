@@ -96,6 +96,38 @@ namespace nera {
         return demalloc(pointer);
     }
 
+    bool copy(pointer_t<void>* from, pointer_t<void>* to)
+    {
+        if (from == nullptr || from->data == nullptr || from->bytes == 0 ||
+            to == nullptr || to->data == nullptr || to->bytes == 0) {
+            return false;
+        } else {
+            word_t* from_words = reinterpret_cast<word_t*>(from->data);
+            word_t* to_words = reinterpret_cast<word_t*>(to->data);
+            size_t bytes;
+            if (from->bytes > to->bytes) {
+                bytes = to->bytes;
+            } else {
+                bytes = from->bytes;
+            }
+            while (bytes >= sizeof(word_t)) {
+                *to_words = *from_words;
+                from_words += 1;
+                to_words += 1;
+                bytes -= sizeof(word_t);
+            }
+            byte_t* from_data = reinterpret_cast<byte_t*>(from_words);
+            byte_t* to_data = reinterpret_cast<byte_t*> (to_words);
+            while (bytes >= sizeof(byte_t)) {
+                *to_data = *from_data;
+                from_data += 1;
+                to_data += 1;
+                bytes -= sizeof(byte_t);
+            }
+            return true;
+        }
+    }
+
     bool allocator_t::zero(pointer_t<void>* pointer)
     {
         if (pointer == nullptr || pointer->data == nullptr || pointer->bytes == 0) {

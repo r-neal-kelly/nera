@@ -11,18 +11,22 @@ namespace nera {
     template <typename data_t>
     class vector_t {
     public:
+        static constexpr float DEFAULT_GROW_RATE = 1.7f;
+
+    public:
         auto_memory_t<data_t> memory;
         size_t count = 0;
-        float grow_rate = 1.7f;
+        float grow_rate = DEFAULT_GROW_RATE;
 
         vector_t();
         vector_t(size_t reserve_count);
         vector_t(const allocator_t& allocator);
         vector_t(const allocator_t& allocator, size_t reserve_count);
+        vector_t(vector_t<data_t>&& to_move);
         ~vector_t();
 
         bool reserve(size_t count);
-        bool energize(float grow_rate);
+        bool energize(float grow_rate = DEFAULT_GROW_RATE);
         bool grow();
         data_t& at(size_t index);
         data_t* point(size_t index);

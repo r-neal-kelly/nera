@@ -16,7 +16,7 @@ namespace nera {
 
     inline size_t hasher_t::reduce(size_t hash, size_t limit) const
     {
-        if (Is_Power_Of_Two(limit)) {
+        if (is_power_of_two(limit)) {
             return bitwise_reduce(hash, limit);
         } else {
             return modulus_reduce(hash, limit);

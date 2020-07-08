@@ -25,13 +25,6 @@ namespace nera {
         )                                   \
     )
 
-    #define NERA_TEST(MESSAGE_, BODY_)  \
-    NERA_M                              \
-        printf("%s ...", MESSAGE_);     \
-        BODY_;                          \
-        printf("Ok!\n");                \
-    NERA_W
-
     constexpr size_t MAX_SIZE_T = ~static_cast<size_t>(0);
 
     void assert(const char* assertion,
@@ -39,7 +32,7 @@ namespace nera {
                 const char* file,
                 int line);
 
-    inline bool Is_Power_Of_Two(size_t word)
+    inline bool is_power_of_two(size_t word)
     {
         return word != 0 && !(word & (word - 1));
     }

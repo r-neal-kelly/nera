@@ -8,50 +8,167 @@
 
 namespace nera { namespace tests {
 
+    void start_tests(const char* name)
+    {
+        printf("%s {\n\n", name);
+    }
+
+    void run_test(const char* name, void (*lambda)())
+    {
+        printf("    %s\n", name);
+        lambda();
+    }
+
+    void stop_tests()
+    {
+        printf("\n}\n\n");
+    }
+
     void utils()
     {
-        NERA_ASSERT(Is_Power_Of_Two(0x0) == false);
-        NERA_ASSERT(Is_Power_Of_Two(0x1) == true);
-        NERA_ASSERT(Is_Power_Of_Two(0x10) == true);
-        NERA_ASSERT(Is_Power_Of_Two(0x11) == false);
-        NERA_ASSERT(Is_Power_Of_Two(0x100) == true);
-        NERA_ASSERT(Is_Power_Of_Two(0x101) == false);
+        NERA_ASSERT(is_power_of_two(0x0) == false);
+        NERA_ASSERT(is_power_of_two(0x1) == true);
+        NERA_ASSERT(is_power_of_two(0x10) == true);
+        NERA_ASSERT(is_power_of_two(0x11) == false);
+        NERA_ASSERT(is_power_of_two(0x100) == true);
+        NERA_ASSERT(is_power_of_two(0x101) == false);
     }
 
     void pointer()
     {
-        NERA_TEST(
-            "pointer_t default constructor:",
+        start_tests("template <typename data_t>\n"
+                    "class pointer_t<data_t>");
+
+        run_test(
+            "pointer_t()",
+            []() -> void
             {
-                pointer_t<void> pointer;
+                pointer_t<int> pointer;
                 NERA_ASSERT(pointer.data == nullptr);
                 NERA_ASSERT(pointer.bytes == 0);
             }
         );
 
-        NERA_TEST(
-            "pointer_t user constructor:",
+        run_test(
+            "pointer_t(data_t*, size_t)",
+            []() -> void
             {
-                pointer_t<void> pointer(nullptr, 0);
-                NERA_ASSERT(pointer.data == nullptr);
-                NERA_ASSERT(pointer.bytes == 0);
+                int ints[5];
+                pointer_t<int> pointer(ints, sizeof(int) * 5);
+                NERA_ASSERT(pointer.data == ints);
+                NERA_ASSERT(pointer.bytes == sizeof(int) * 5);
             }
         );
 
-        NERA_TEST(
-            "pointer_t deconstructor:",
+        run_test(
+            "pointer_t(data_t*)",
+            []() -> void
             {
-                int num = 16;
-                pointer_t<int> pointer(&num, sizeof(int));
-                NERA_ASSERT(pointer.data == &num);
-                NERA_ASSERT(pointer.bytes == sizeof(int));
+                char letter = 'a';
+                pointer_t<char> pointer(&letter);
+                NERA_ASSERT(pointer.data == &letter);
+                NERA_ASSERT(pointer.bytes == sizeof(char));
+            }
+        );
+
+        run_test(
+            "pointer_t(const pointer_t<data_t>&)",
+            []() -> void
+            {
+                uint16_t num_16 = 256;
+                pointer_t<uint16_t> pointer_a(&num_16);
+                pointer_t<uint16_t> pointer_b(pointer_a);
+                NERA_ASSERT(pointer_a.data == &num_16);
+                NERA_ASSERT(pointer_b.data == &num_16);
+                NERA_ASSERT(pointer_a.bytes == sizeof(uint16_t));
+                NERA_ASSERT(pointer_b.bytes == sizeof(uint16_t));
+            }
+        );
+
+        run_test(
+            "pointer_t(pointer_t<data_t>&&)",
+            []() -> void
+            {
+                struct test_t { int a = 16; int b = 32; int c = 64; } test;
+                pointer_t<test_t> pointer_a(&test);
+                pointer_t<test_t> pointer_b(pointer_a);
+                pointer_t<test_t> pointer_c(std::move(pointer_a));
+                NERA_ASSERT(pointer_a.data == nullptr);
+                NERA_ASSERT(pointer_b.data == &test);
+                NERA_ASSERT(pointer_c.data == &test);
+                NERA_ASSERT(pointer_a.bytes == 0);
+                NERA_ASSERT(pointer_b.bytes == sizeof(test_t));
+                NERA_ASSERT(pointer_c.bytes == sizeof(test_t));
+            }
+        );
+
+        run_test(
+            "pointer_t<data_t>& operator=(const pointer_t<data_t>&)",
+            []() -> void
+            {
+                uint16_t num_16 = 256;
+                pointer_t<uint16_t> pointer_a(&num_16);
+                pointer_t<uint16_t> pointer_b = pointer_a;
+                NERA_ASSERT(pointer_a.data == &num_16);
+                NERA_ASSERT(pointer_b.data == &num_16);
+                NERA_ASSERT(pointer_a.bytes == sizeof(uint16_t));
+                NERA_ASSERT(pointer_b.bytes == sizeof(uint16_t));
+            }
+        );
+
+        run_test(
+            "pointer_t<data_t>& operator=(pointer_t<data_t>&&)",
+            []() -> void
+            {
+                struct test_t { int a = 16; int b = 32; int c = 64; } test;
+                pointer_t<test_t> pointer_a(&test);
+                pointer_t<test_t> pointer_b = pointer_a;
+                pointer_t<test_t> pointer_c = std::move(pointer_a);
+                NERA_ASSERT(pointer_a.data == nullptr);
+                NERA_ASSERT(pointer_b.data == &test);
+                NERA_ASSERT(pointer_c.data == &test);
+                NERA_ASSERT(pointer_a.bytes == 0);
+                NERA_ASSERT(pointer_b.bytes == sizeof(test_t));
+                NERA_ASSERT(pointer_c.bytes == sizeof(test_t));
+            }
+        );
+
+        run_test(
+            "~pointer_t()",
+            []() -> void
+            {
+                int ints[5];
+                pointer_t<int> pointer(ints, sizeof(ints));
+                NERA_ASSERT(pointer.data == ints);
+                NERA_ASSERT(pointer.bytes == sizeof(int) * 5);
+
                 pointer.~pointer_t();
                 NERA_ASSERT(pointer.data == nullptr);
                 NERA_ASSERT(pointer.bytes == 0);
             }
         );
-        NERA_TEST(
-            "pointer_t<data_t> to pointer_t<void>*:",
+
+        run_test(
+            "size_t count()",
+            []() -> void
+            {
+                bool bools[24];
+                pointer_t<bool> pointer_a(bools, sizeof(bools));
+                NERA_ASSERT(pointer_a.data == bools);
+                NERA_ASSERT(pointer_a.bytes == 24);
+                NERA_ASSERT(pointer_a.count() == 24);
+
+                word_t words[12];
+                pointer_t<word_t> pointer_b(words, sizeof(words));
+                NERA_ASSERT(pointer_b.data == words);
+                NERA_ASSERT(pointer_b.bytes == sizeof(word_t) * 12);
+                NERA_ASSERT(pointer_b.count() == 12);
+            }
+        );
+
+        run_test(
+            "operator pointer_t<void>* ()",
+            []() -> void
             {
                 double dbl = 100.1;
                 pointer_t<double> pointer(&dbl, sizeof(double));
@@ -60,6 +177,20 @@ namespace nera { namespace tests {
                 NERA_ASSERT(void_pointer->bytes == sizeof(double));
             }
         );
+
+        run_test(
+            "operator data_t* ()",
+            []() -> void
+            {
+                float flt = 17823.0234f;
+                pointer_t<float> pointer(&flt);
+                float* flt_pointer = pointer;
+                NERA_ASSERT(flt_pointer == &flt);
+                NERA_ASSERT(flt_pointer == pointer.data);
+            }
+        );
+
+        stop_tests();
     }
 
     void allocator()
@@ -144,6 +275,8 @@ namespace nera { namespace tests {
 int main()
 {
     using namespace nera;
+
+    printf("\n(nera's test suite will assert on any failure)\n\n");
 
     tests::utils();
     tests::pointer();

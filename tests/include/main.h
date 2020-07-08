@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "nera/types.h"
 #include "nera/utils.h"
 #include "nera/allocator.h"
 #include "nera/memory.h"

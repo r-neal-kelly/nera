@@ -38,7 +38,7 @@ namespace nera {
     }
 
     template <typename data_t>
-    inline pointer_t<data_t>::pointer_t(pointer_t<data_t>&& to_move) :
+    inline pointer_t<data_t>::pointer_t(pointer_t<data_t>&& to_move) noexcept :
         data(std::exchange(to_move.data, nullptr)), bytes(std::exchange(to_move.bytes, 0))
     {
     }
@@ -54,7 +54,7 @@ namespace nera {
     }
 
     template <typename data_t>
-    inline pointer_t<data_t>& pointer_t<data_t>::operator=(pointer_t<data_t>&& to_move)
+    inline pointer_t<data_t>& pointer_t<data_t>::operator=(pointer_t<data_t>&& to_move) noexcept
     {
         data = std::exchange(to_move.data, nullptr);
         bytes = std::exchange(to_move.bytes, 0);

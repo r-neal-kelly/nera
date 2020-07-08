@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "stdio.h" // temp for printf
 #include <utility>
 
 #include "nera/utils.h"
@@ -39,7 +38,6 @@ namespace nera {
     /*template <typename data_t>
     vector_t<data_t>::vector_t(const vector_t<data_t>& from)
     {
-        printf("in vector_t copy constructor");
     }*/
 
     template <typename data_t>
@@ -48,13 +46,11 @@ namespace nera {
         count(std::exchange(to_move.count, 0)),
         grow_rate(std::exchange(to_move.grow_rate, DEFAULT_GROW_RATE))
     {
-        printf("in vector_t move constructor\n");
     }
 
     template <typename data_t>
     vector_t<data_t>::~vector_t()
     {
-        printf("calling vector_t destructor\n");
         memory.free();
         grow_rate = 1.7f;
         count = 0;

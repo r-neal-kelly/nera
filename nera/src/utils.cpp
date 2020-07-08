@@ -14,7 +14,7 @@ namespace nera {
                 const char* file,
                 int line)
     {
-        printf("NERA_ASSERT: ( %s ) is not true!\n", assertion);
+        printf("\nNERA_ASSERT: ( %s ) is not true!\n", assertion);
         printf("    in func: %s\n", function);
         printf("    in file: %s\n", file);
         printf("    on line: %i\n", line);

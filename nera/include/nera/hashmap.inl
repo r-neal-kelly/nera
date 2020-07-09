@@ -170,7 +170,7 @@ namespace nera {
     inline size_t hashmap_t<key_t, value_t>::index_of(key_t& key)
     {
         NERA_ASSERT(try_grow() == false); // should be called before this scope
-        size_t index = hasher.hash_and_reduce(pointer_t<key_t>(&key), buckets.count());
+        size_t index = hasher.hash_and_reduce(pointer_t<key_t>(&key, sizeof(key)), buckets.count());
         NERA_ASSERT(index != MAX_SIZE_T);
         size_t indices_count = indices.count();
         size_t indices_iterated = 0;

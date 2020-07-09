@@ -8,7 +8,7 @@
 
 namespace nera {
 
-    typedef size_t (*hash_f)(pointer_t<void>* pointer);
+    typedef size_t (*hash_f)(pointer_t<void>& pointer);
 
     class hasher_t {
     public:
@@ -22,7 +22,7 @@ namespace nera {
         size_t reduce(size_t hash, size_t limit) const;
         size_t bitwise_reduce(size_t hash, size_t power_of_two_limit) const;
         size_t modulus_reduce(size_t hash, size_t above_zero_limit) const;
-        size_t hash_and_reduce(pointer_t<void>* pointer, size_t limit) const;
+        size_t hash_and_reduce(pointer_t<void>& pointer, size_t limit) const;
     };
 
 }

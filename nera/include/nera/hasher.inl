@@ -41,7 +41,7 @@ namespace nera {
         }
     }
 
-    inline size_t hasher_t::hash_and_reduce(pointer_t<void>* pointer, size_t limit) const
+    inline size_t hasher_t::hash_and_reduce(pointer_t<void>& pointer, size_t limit) const
     {
         return reduce(hash(pointer), limit);
     }

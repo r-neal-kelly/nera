@@ -8,11 +8,8 @@
 #include <utility>
 
 #include "nera/pointer.h"
-#include "nera/utils.h"
 
 namespace nera {
-
-    // data_t
 
     template <typename data_t>
     inline pointer_t<data_t>::pointer_t() :
@@ -101,7 +98,9 @@ namespace nera {
         return bytes / sizeof(data_t);
     }
 
-    // void
+}
+
+namespace nera {
 
     inline pointer_t<void>::pointer_t() :
         data(nullptr), bytes(0)

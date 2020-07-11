@@ -168,6 +168,7 @@
     <None Include="include\nera\hashmap.inl" />
     <None Include="include\nera\memory.inl" />
     <None Include="include\nera\pointer.inl" />
+    <None Include="include\nera\string.inl" />
     <None Include="include\nera\tuple.inl" />
     <None Include="include\nera\vector.inl" />
   </ItemGroup>

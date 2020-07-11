@@ -37,9 +37,17 @@ namespace nera { namespace tests {
         lambda();
     }
 
+    void run_test(const char* line_1, const char* line_2, const char* line_3, void (*lambda)())
+    {
+        printf("    %s\n", line_1);
+        printf("    %s\n", line_2);
+        printf("    %s\n", line_3);
+        lambda();
+    }
+
     void stop_tests()
     {
-        printf("}\n\n");
+        printf("};\n\n");
     }
 
     void utils()
@@ -58,7 +66,7 @@ namespace nera { namespace tests {
                     "class pointer_t<data_t>");
 
         run_test(
-            "pointer_t()",
+            "pointer_t();",
             []() -> void
             {
                 pointer_t<int> pointer;
@@ -67,7 +75,7 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "pointer_t(data_t* data, size_t bytes)",
+            "pointer_t(data_t* data, size_t bytes);",
             []() -> void
             {
                 int num = 5;
@@ -88,7 +96,7 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "pointer_t(data_t& data)",
+            "pointer_t(data_t& data);",
             []() -> void
             {
                 char letter = 'c';
@@ -114,7 +122,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "pointer_t(const pointer_t<data_t>& other)",
+            "pointer_t(const pointer_t<data_t>& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -150,7 +158,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "pointer_t(pointer_t<data_t>&& other)",
+            "pointer_t(pointer_t<data_t>&& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -171,7 +179,7 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "pointer_t(pointer_t<void>&& other)",
+            "pointer_t(pointer_t<void>&& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -192,7 +200,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "pointer_t<data_t>& operator=(const pointer_t<data_t>& other)",
+            "pointer_t<data_t>& operator=(const pointer_t<data_t>& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -235,7 +243,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "pointer_t<data_t>& operator=(pointer_t<data_t>&& other)",
+            "pointer_t<data_t>& operator=(pointer_t<data_t>&& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -278,7 +286,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "~pointer_t()",
+            "~pointer_t();",
             []() -> void
             {
                 int num = 5;
@@ -310,7 +318,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "size_t count()",
+            "size_t count();",
             []() -> void
             {
                 bool bools[24];
@@ -329,7 +337,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "operator pointer_t<void>& ()",
+            "operator pointer_t<void>& ();",
             []() -> void
             {
                 char letter = 'c';
@@ -370,13 +378,13 @@ namespace nera { namespace tests {
         stop_tests();
     }
 
-    void pointer_void()
+    void pointer_void_t()
     {
         start_tests("template <>",
                     "class pointer_t<void>");
 
         run_test(
-            "pointer_t()",
+            "pointer_t();",
             []() -> void
             {
                 pointer_t<void> pointer;
@@ -385,7 +393,7 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "pointer_t(void* data, size_t bytes)",
+            "pointer_t(void* data, size_t bytes);",
             []() -> void
             {
                 int num = 5;
@@ -406,8 +414,8 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "template <typename data_t>"
-            "pointer_t(data_t& data)",
+            "template <typename data_t>",
+            "pointer_t(data_t& data);",
             []() -> void
             {
                 char letter = 'c';
@@ -433,8 +441,8 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "template <typename data_t>"
-            "pointer_t(pointer_t<data_t>& other)",
+            "template <typename data_t>",
+            "pointer_t(pointer_t<data_t>& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -451,7 +459,7 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "pointer_t(const pointer_t<void>& other)",
+            "pointer_t(const pointer_t<void>& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -470,8 +478,8 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "template <typename data_t>"
-            "pointer_t(pointer_t<data_t>&& other)",
+            "template <typename data_t>",
+            "pointer_t(pointer_t<data_t>&& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -489,7 +497,7 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "pointer_t(pointer_t<void>&& other)",
+            "pointer_t(pointer_t<void>&& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -508,7 +516,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "pointer_t<void>& operator=(const pointer_t<void>& other)",
+            "pointer_t<void>& operator=(const pointer_t<void>& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -546,8 +554,8 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "template <typename data_t>"
-            "pointer_t<void>& operator=(pointer_t<data_t>&& other)",
+            "template <typename data_t>",
+            "pointer_t<void>& operator=(pointer_t<data_t>&& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -569,7 +577,7 @@ namespace nera { namespace tests {
             }
         );
         run_test(
-            "pointer_t<void>& operator=(pointer_t<void>&& other)",
+            "pointer_t<void>& operator=(pointer_t<void>&& other);",
             []() -> void
             {
                 struct test_t { int a = 16; int b = 32; int c = 64; } test;
@@ -592,7 +600,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "~pointer_t()",
+            "~pointer_t();",
             []() -> void
             {
                 int num = 5;
@@ -624,7 +632,7 @@ namespace nera { namespace tests {
 
         new_line();
         run_test(
-            "template <typename data_t>"
+            "template <typename data_t>",
             "operator pointer_t<data_t>& ();",
             []() -> void
             {
@@ -660,12 +668,13 @@ namespace nera { namespace tests {
 
     void pointer_friend()
     {
-        start_tests("friend pointer_t<data_t>",
-                    "friend pointer_t<void>");
+        start_tests("pointer_t<data_t> friend,",
+                    "pointer_t<void> friend");
 
         run_test(
             "template <typename data_t1, typename data_t2>",
-            "friend bool operator ==(const pointer_t<data_t1>& pointer_a, const pointer_t<data_t2> & pointer_b)",
+            "friend bool operator ==(const pointer_t<data_t1>& pointer_a,",
+            "                        const pointer_t<data_t2> & pointer_b);",
             []() -> void
             {
                 int num = 5;
@@ -714,7 +723,8 @@ namespace nera { namespace tests {
 
         run_test(
             "template <typename data_t1, typename data_t2>",
-            "friend bool operator !=(const pointer_t<data_t1>& pointer_a, const pointer_t<data_t2> & pointer_b)",
+            "friend bool operator !=(const pointer_t<data_t1>& pointer_a,",
+            "                        const pointer_t<data_t2> & pointer_b);",
             []() -> void
             {
                 int num_a = 5;
@@ -843,11 +853,17 @@ int main()
 {
     using namespace nera;
 
-    printf("\n(nera's test suite will assert on any failure)\n\n");
+    tests::new_line();
+    printf("This test suite will rigorously test Nera, a library\n"
+           "containing general types that will combine into a new\n"
+           "regular expression engine. The types will be made with\n"
+           "reuse in mind.\n"
+           "(The suite will assert on any detected failures.)\n");
+    tests::new_line();
 
     tests::utils();
     tests::pointer_data_t();
-    tests::pointer_void();
+    tests::pointer_void_t();
     tests::pointer_friend();
     tests::allocator();
     tests::memory();

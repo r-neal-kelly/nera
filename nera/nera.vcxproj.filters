@@ -88,5 +88,8 @@
     <None Include="include\nera\hasher.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="include\nera\string.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

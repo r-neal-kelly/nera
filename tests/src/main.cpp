@@ -3,6 +3,8 @@
 */
 
 #include "stdio.h"
+#include <thread>
+#include <chrono>
 
 #include "main.h"
 
@@ -58,6 +60,214 @@ namespace nera { namespace tests {
         NERA_ASSERT(is_power_of_two(0x11) == false);
         NERA_ASSERT(is_power_of_two(0x100) == true);
         NERA_ASSERT(is_power_of_two(0x101) == false);
+    }
+
+    void utils_bits()
+    {
+        start_tests("namespace nera");
+
+        run_test(
+            "template <typename bits_t, typename idx_t>",
+            "bits_t bit_on(const bits_t& bits, const idx_t idx);",
+            []() -> void
+            {
+                byte_t byte = 0;
+
+                byte = bit_on(byte, 0);
+                NERA_ASSERT(byte == 1);
+                byte = bit_on(byte, 1);
+                NERA_ASSERT(byte == 3);
+                byte = bit_on(byte, 2);
+                NERA_ASSERT(byte == 7);
+                byte = bit_on(byte, 3);
+                NERA_ASSERT(byte == 15);
+                byte = bit_on(byte, 4);
+                NERA_ASSERT(byte == 31);
+                byte = bit_on(byte, 5);
+                NERA_ASSERT(byte == 63);
+                byte = bit_on(byte, 6);
+                NERA_ASSERT(byte == 127);
+                byte = bit_on(byte, 7);
+                NERA_ASSERT(byte == 255);
+            }
+        );
+
+        new_line();
+        run_test(
+            "template <typename bits_t, typename idx_t>",
+            "bits_t bit_off(const bits_t& bits, const idx_t idx);",
+            []() -> void
+            {
+                byte_t byte = 255;
+
+                byte = bit_off(byte, 0);
+                NERA_ASSERT(byte == 254);
+                byte = bit_off(byte, 1);
+                NERA_ASSERT(byte == 252);
+                byte = bit_off(byte, 2);
+                NERA_ASSERT(byte == 248);
+                byte = bit_off(byte, 3);
+                NERA_ASSERT(byte == 240);
+                byte = bit_off(byte, 4);
+                NERA_ASSERT(byte == 224);
+                byte = bit_off(byte, 5);
+                NERA_ASSERT(byte == 192);
+                byte = bit_off(byte, 6);
+                NERA_ASSERT(byte == 128);
+                byte = bit_off(byte, 7);
+                NERA_ASSERT(byte == 0);
+            }
+        );
+
+        new_line();
+        run_test(
+            "template <typename bits_t, typename idx_t>",
+            "bool is_bit_on(const bits_t& bits, const idx_t idx);",
+            []() -> void
+            {
+                NERA_ASSERT(is_bit_on(0, 0) == false);
+                NERA_ASSERT(is_bit_on(0, 1) == false);
+                NERA_ASSERT(is_bit_on(0, 2) == false);
+
+                NERA_ASSERT(is_bit_on(1, 0) == true);
+                NERA_ASSERT(is_bit_on(1, 1) == false);
+                NERA_ASSERT(is_bit_on(1, 2) == false);
+
+                NERA_ASSERT(is_bit_on(2, 0) == false);
+                NERA_ASSERT(is_bit_on(2, 1) == true);
+                NERA_ASSERT(is_bit_on(2, 2) == false);
+
+                NERA_ASSERT(is_bit_on(3, 0) == true);
+                NERA_ASSERT(is_bit_on(3, 1) == true);
+                NERA_ASSERT(is_bit_on(3, 2) == false);
+
+                NERA_ASSERT(is_bit_on(4, 0) == false);
+                NERA_ASSERT(is_bit_on(4, 1) == false);
+                NERA_ASSERT(is_bit_on(4, 2) == true);
+
+                NERA_ASSERT(is_bit_on(5, 0) == true);
+                NERA_ASSERT(is_bit_on(5, 1) == false);
+                NERA_ASSERT(is_bit_on(5, 2) == true);
+
+                NERA_ASSERT(is_bit_on(6, 0) == false);
+                NERA_ASSERT(is_bit_on(6, 1) == true);
+                NERA_ASSERT(is_bit_on(6, 2) == true);
+
+                NERA_ASSERT(is_bit_on(7, 0) == true);
+                NERA_ASSERT(is_bit_on(7, 1) == true);
+                NERA_ASSERT(is_bit_on(7, 2) == true);
+            }
+        );
+
+        new_line();
+        run_test(
+            "template <typename bits_t, typename idx_t>",
+            "bool is_bit_off(const bits_t& bits, const idx_t idx);",
+            []() -> void
+            {
+                NERA_ASSERT(is_bit_off(0, 0) == true);
+                NERA_ASSERT(is_bit_off(0, 1) == true);
+                NERA_ASSERT(is_bit_off(0, 2) == true);
+
+                NERA_ASSERT(is_bit_off(1, 0) == false);
+                NERA_ASSERT(is_bit_off(1, 1) == true);
+                NERA_ASSERT(is_bit_off(1, 2) == true);
+
+                NERA_ASSERT(is_bit_off(2, 0) == true);
+                NERA_ASSERT(is_bit_off(2, 1) == false);
+                NERA_ASSERT(is_bit_off(2, 2) == true);
+
+                NERA_ASSERT(is_bit_off(3, 0) == false);
+                NERA_ASSERT(is_bit_off(3, 1) == false);
+                NERA_ASSERT(is_bit_off(3, 2) == true);
+
+                NERA_ASSERT(is_bit_off(4, 0) == true);
+                NERA_ASSERT(is_bit_off(4, 1) == true);
+                NERA_ASSERT(is_bit_off(4, 2) == false);
+
+                NERA_ASSERT(is_bit_off(5, 0) == false);
+                NERA_ASSERT(is_bit_off(5, 1) == true);
+                NERA_ASSERT(is_bit_off(5, 2) == false);
+
+                NERA_ASSERT(is_bit_off(6, 0) == true);
+                NERA_ASSERT(is_bit_off(6, 1) == false);
+                NERA_ASSERT(is_bit_off(6, 2) == false);
+
+                NERA_ASSERT(is_bit_off(7, 0) == false);
+                NERA_ASSERT(is_bit_off(7, 1) == false);
+                NERA_ASSERT(is_bit_off(7, 2) == false);
+            }
+        );
+
+        new_line();
+        run_test(
+            "template <typename bits_t, typename idx_t>",
+            "bits_t toggle_bit(const bits_t& bits, const idx_t idx);",
+            []() -> void
+            {
+                byte_t byte = 0;
+
+                byte = toggle_bit(byte, 0);
+                NERA_ASSERT(byte == 1);
+                byte = toggle_bit(byte, 0);
+                NERA_ASSERT(byte == 0);
+
+                byte = toggle_bit(byte, 1);
+                NERA_ASSERT(byte == 2);
+                byte = toggle_bit(byte, 1);
+                NERA_ASSERT(byte == 0);
+
+                byte = toggle_bit(byte, 2);
+                NERA_ASSERT(byte == 4);
+                byte = toggle_bit(byte, 2);
+                NERA_ASSERT(byte == 0);
+
+                byte = toggle_bit(byte, 3);
+                NERA_ASSERT(byte == 8);
+                byte = toggle_bit(byte, 3);
+                NERA_ASSERT(byte == 0);
+
+                byte = toggle_bit(byte, 4);
+                NERA_ASSERT(byte == 16);
+                byte = toggle_bit(byte, 4);
+                NERA_ASSERT(byte == 0);
+
+                byte = toggle_bit(byte, 5);
+                NERA_ASSERT(byte == 32);
+                byte = toggle_bit(byte, 5);
+                NERA_ASSERT(byte == 0);
+
+                byte = toggle_bit(byte, 6);
+                NERA_ASSERT(byte == 64);
+                byte = toggle_bit(byte, 6);
+                NERA_ASSERT(byte == 0);
+
+                byte = toggle_bit(byte, 7);
+                NERA_ASSERT(byte == 128);
+                byte = toggle_bit(byte, 7);
+                NERA_ASSERT(byte == 0);
+            }
+        );
+
+        new_line();
+        run_test(
+            "template <typename bits_t>",
+            "bits_t clear_bits(const bits_t& bits);",
+            []() -> void
+            {
+                byte_t byte = 255;
+                byte = clear_bits(byte);
+                NERA_ASSERT(byte == 0);
+                byte = clear_bits(byte);
+                NERA_ASSERT(byte == 0);
+                byte = bit_on(byte, 7);
+                NERA_ASSERT(byte == 128);
+                byte = clear_bits(byte);
+                NERA_ASSERT(byte == 0);
+            }
+        );
+
+        stop_tests();
     }
 
     void pointer_data_t()
@@ -802,6 +1012,19 @@ namespace nera { namespace tests {
         for (size_t index = 0, count = ints.count; index < count; index += 1) {
             printf("%i", ints[index]);
         } printf("\n");
+
+        if (false) {
+            uint32_t num = 0;
+            pointer_t<uint32_t> pointer(num);
+            constexpr uint32_t max = static_cast<uint16_t>(~0) + 1;
+            for (; num < max; num += 1) {
+                vector_t<char> binary = to_binary(pointer);
+                vector_t<char> hexadecimal = to_hexadecimal(pointer);
+                printf("%s %s\n",
+                       binary.memory.pointer.data,
+                       hexadecimal.memory.pointer.data);
+            }
+        }
     }
 
     void hasher()
@@ -847,32 +1070,77 @@ namespace nera { namespace tests {
         } printf("\n");
     }
 
+    inline void divider()
+    {
+        for (size_t idx = 0; idx < 64; idx += 1) {
+            putc('.', stdout);
+            std::this_thread::sleep_for(std::chrono::milliseconds(12));
+        } printf("\n\n");
+    }
+
+    inline char get_one_char()
+    {
+        char result = getc(stdin);
+        if (result != '\n') {
+            while (getc(stdin) != '\n');
+        }
+
+        return result;
+    }
+
+    void manual_mode()
+    {
+        //divider(); tests::utils(); get_one_char();
+        divider(); tests::utils_bits(); get_one_char();
+        divider(); tests::pointer_data_t(); get_one_char();
+        divider(); tests::pointer_void_t(); get_one_char();
+        divider(); tests::pointer_friend(); get_one_char();
+        //divider(); tests::allocator(); get_one_char();
+        //divider(); tests::memory(); get_one_char();
+        //divider(); tests::vector(); get_one_char();
+        //divider(); tests::hasher(); get_one_char();
+        //divider(); tests::hashmap(); get_one_char();
+
+        divider(); printf("success!\n");
+    }
+
+    void automatic_mode()
+    {
+        tests::utils();
+        tests::utils_bits();
+        tests::pointer_data_t();
+        tests::pointer_void_t();
+        tests::pointer_friend();
+        tests::allocator();
+        tests::memory();
+        tests::vector();
+        tests::hasher();
+        tests::hashmap();
+
+        printf("\nsuccess!\n");
+    }
+
 }}
 
-int main()
+int main(int arg_count, char* args[])
 {
     using namespace nera;
 
-    tests::new_line();
+    tests::divider();
     printf("This test suite will rigorously test Nera, a library\n"
            "containing general types that will combine into a new\n"
            "regular expression engine. The types will be made with\n"
            "reuse in mind.\n"
-           "(The suite will assert on any detected failures.)\n");
-    tests::new_line();
+           "The suite will assert on any detected failures.\n\n");
+    tests::divider();
 
-    tests::utils();
-    tests::pointer_data_t();
-    tests::pointer_void_t();
-    tests::pointer_friend();
-    tests::allocator();
-    tests::memory();
-    tests::vector();
-    tests::hasher();
-    tests::hashmap();
+    printf("[m]anual mode, or [a]utomatic?\n\n");
 
-    printf("\nsuccess!\n");
-    //getc(stdin);
-
-    return 0;
+    if (tests::get_one_char() == 'm') {
+        tests::manual_mode();
+    } else {
+        tests::automatic_mode();
+    }
+    
+    return EXIT_SUCCESS;
 }

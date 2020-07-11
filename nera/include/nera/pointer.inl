@@ -4,6 +4,7 @@
 
 #pragma once
 
+//#include "stdio.h" // temp for printf
 #include <utility>
 
 #include "nera/pointer.h"
@@ -38,12 +39,6 @@ namespace nera {
     }
 
     template <typename data_t>
-    inline pointer_t<data_t>::pointer_t(const pointer_t<void>& other) :
-        data(static_cast<data_t*>(other.data)), bytes(other.bytes)
-    {
-    }
-
-    template <typename data_t>
     inline pointer_t<data_t>::pointer_t(pointer_t<data_t>&& other) noexcept :
         data(std::exchange(other.data, nullptr)), bytes(std::exchange(other.bytes, 0))
     {
@@ -66,30 +61,10 @@ namespace nera {
     }
 
     template <typename data_t>
-    inline pointer_t<data_t>& pointer_t<data_t>::operator=(const pointer_t<void>& other)
-    {
-        if (&static_cast<pointer_t<data_t>>(other) != this) {
-            data = static_cast<data_t*>(other.data);
-            bytes = other.bytes;
-        }
-        return *this;
-    }
-
-    template <typename data_t>
     inline pointer_t<data_t>& pointer_t<data_t>::operator=(pointer_t<data_t>&& other) noexcept
     {
         if (&other != this) {
             data = std::exchange(other.data, nullptr);
-            bytes = std::exchange(other.bytes, 0);
-        }
-        return *this;
-    }
-
-    template <typename data_t>
-    inline pointer_t<data_t>& pointer_t<data_t>::operator=(pointer_t<void>&& other) noexcept
-    {
-        if (&static_cast<pointer_t<data_t>>(other) != this) {
-            data = static_cast<data_t*>(std::exchange(other.data, nullptr));
             bytes = std::exchange(other.bytes, 0);
         }
         return *this;
@@ -106,12 +81,6 @@ namespace nera {
     inline pointer_t<data_t>::operator pointer_t<void>& ()
     {
         return reinterpret_cast<pointer_t<void>&>(*this);
-    }
-
-    template <typename data_t>
-    inline pointer_t<data_t>::operator pointer_t<void>* ()
-    {
-        return reinterpret_cast<pointer_t<void>*>(this);
     }
 
     template <typename data_t1, typename data_t2>
@@ -144,8 +113,26 @@ namespace nera {
     {
     }
 
+    template <typename data_t>
+    inline pointer_t<void>::pointer_t(data_t& data) :
+        data(&data), bytes(sizeof(data))
+    {
+    }
+
+    template <typename data_t>
+    inline pointer_t<void>::pointer_t(pointer_t<data_t>& other) :
+        data(other.data), bytes(other.bytes)
+    {
+    }
+
     inline pointer_t<void>::pointer_t(const pointer_t<void>& other) :
         data(other.data), bytes(other.bytes)
+    {
+    }
+
+    template <typename data_t>
+    inline pointer_t<void>::pointer_t(pointer_t<data_t>&& other) noexcept :
+        data(std::exchange(other.data, nullptr)), bytes(std::exchange(other.bytes, 0))
     {
     }
 
@@ -159,6 +146,16 @@ namespace nera {
         if (&other != this) {
             data = other.data;
             bytes = other.bytes;
+        }
+        return *this;
+    }
+
+    template <typename data_t>
+    inline pointer_t<void>& pointer_t<void>::operator =(pointer_t<data_t>&& other) noexcept
+    {
+        if (reinterpret_cast<pointer_t<void>*>(&other) != this) {
+            data = std::exchange(other.data, nullptr);
+            bytes = std::exchange(other.bytes, 0);
         }
         return *this;
     }
@@ -182,12 +179,6 @@ namespace nera {
     inline pointer_t<void>::operator pointer_t<data_t>& ()
     {
         return reinterpret_cast<pointer_t<data_t>&>(*this);
-    }
-
-    template <typename data_t>
-    inline pointer_t<void>::operator pointer_t<data_t>* ()
-    {
-        return reinterpret_cast<pointer_t<data_t>*>(this);
     }
 
 }

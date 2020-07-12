@@ -4,12 +4,12 @@
 
 #include "stdlib.h"
 
-#include "nera/allocator.h"
 #include "nera/types.h"
+#include "nera/allocator.h"
 
 namespace nera {
 
-    bool allocator_t::malloc(pointer_t<void>& pointer, size_t bytes)
+    static bool malloc(pointer_t<void>& pointer, size_t bytes)
     {
         if (pointer.data != nullptr || bytes == 0) {
             return false;
@@ -25,7 +25,7 @@ namespace nera {
         }
     }
 
-    bool allocator_t::remalloc(pointer_t<void>& pointer, size_t bytes)
+    static bool remalloc(pointer_t<void>& pointer, size_t bytes)
     {
         if (pointer.data == nullptr || bytes == 0) {
             return false;
@@ -41,7 +41,7 @@ namespace nera {
         }
     }
 
-    bool allocator_t::demalloc(pointer_t<void>& pointer)
+    static bool demalloc(pointer_t<void>& pointer)
     {
         if (pointer.data == nullptr) {
             return false;
@@ -53,7 +53,7 @@ namespace nera {
         }
     }
 
-    bool allocator_t::calloc(pointer_t<void>& pointer, size_t bytes)
+    static bool calloc(pointer_t<void>& pointer, size_t bytes)
     {
         if (pointer.data != nullptr || bytes == 0) {
             return false;
@@ -69,7 +69,7 @@ namespace nera {
         }
     }
 
-    bool allocator_t::recalloc(pointer_t<void>& pointer, size_t bytes)
+    static bool recalloc(pointer_t<void>& pointer, size_t bytes)
     {
         if (pointer.data == nullptr || bytes == 0) {
             return false;
@@ -80,7 +80,7 @@ namespace nera {
                     pointer_t<void> slice;
                     slice.data = reinterpret_cast<byte_t*>(data) + pointer.bytes;
                     slice.bytes = bytes - pointer.bytes;
-                    zero(slice);
+                    allocator_t::zero(slice);
                 }
                 pointer.data = data;
                 pointer.bytes = bytes;
@@ -91,7 +91,7 @@ namespace nera {
         }
     }
 
-    bool allocator_t::decalloc(pointer_t<void>& pointer)
+    static bool decalloc(pointer_t<void>& pointer)
     {
         return demalloc(pointer);
     }

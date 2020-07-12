@@ -9,8 +9,8 @@ namespace nera {
     #define NERA_M \
         do {
 
-    #define NERA_W } \
-        while(false)
+    #define NERA_W \
+        } while(false)
 
     #define NERA_ASSERT(THIS_IS_TRUE_)      \
     (                                       \

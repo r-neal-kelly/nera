@@ -15,7 +15,8 @@ namespace nera { namespace tests {
         printf("%s {\n", name);
     }
 
-    void start_tests(const char* line_1, const char* line_2)
+    void start_tests(const char* line_1,
+                     const char* line_2)
     {
         printf("%s\n", line_1);
         printf("%s {\n", line_2);
@@ -26,24 +27,43 @@ namespace nera { namespace tests {
         printf("\n");
     }
 
-    void run_test(const char* name, void (*lambda)())
+    void run_test(const char* name,
+                  void (*lambda)())
     {
         printf("    %s\n", name);
         lambda();
     }
 
-    void run_test(const char* line_1, const char* line_2, void (*lambda)())
+    void run_test(const char* line_1,
+                  const char* line_2,
+                  void (*lambda)())
     {
         printf("    %s\n", line_1);
         printf("    %s\n", line_2);
         lambda();
     }
 
-    void run_test(const char* line_1, const char* line_2, const char* line_3, void (*lambda)())
+    void run_test(const char* line_1,
+                  const char* line_2,
+                  const char* line_3,
+                  void (*lambda)())
     {
         printf("    %s\n", line_1);
         printf("    %s\n", line_2);
         printf("    %s\n", line_3);
+        lambda();
+    }
+
+    void run_test(const char* line_1,
+                  const char* line_2,
+                  const char* line_3,
+                  const char* line_4,
+                  void (*lambda)())
+    {
+        printf("    %s\n", line_1);
+        printf("    %s\n", line_2);
+        printf("    %s\n", line_3);
+        printf("    %s\n", line_4);
         lambda();
     }
 
@@ -982,6 +1002,158 @@ namespace nera { namespace tests {
 
     void allocator()
     {
+        start_tests("class allocator_t");
+
+        run_test(
+            "static const allocator_t& mallocator();",
+            []() -> void
+            {
+                // need to test each individual method too
+            }
+        );
+
+        run_test(
+            "static const allocator_t& callocator();",
+            []() -> void
+            {
+                // need to test each individual method too
+            }
+        );
+
+        new_line();
+        run_test(
+            "static bool copy(pointer_t<void>& from, pointer_t<void>& to);",
+            []() -> void
+            {
+
+            }
+        );
+
+        run_test(
+            "static bool zero(pointer_t<void>& pointer);",
+            []() -> void
+            {
+
+            }
+        );
+
+        new_line();
+        run_test(
+            "allocator_t(allocate_f allocate,",
+            "            reallocate_f reallocate,",
+            "            deallocate_f deallocate,",
+            "            bool initializes_to_zero);",
+            []() -> void
+            {
+                static byte_t heap[64];
+                static size_t cursor = 0;
+
+                auto allocate = [](pointer_t<void>& pointer, size_t bytes) -> bool
+                {
+                    if (cursor + bytes <= sizeof(heap)) {
+                        pointer.data = &heap[cursor];
+                        pointer.bytes = bytes;
+                        cursor += bytes;
+                        return true;
+                    } else {
+                        return false; // out of memory.
+                    }
+                };
+
+                auto reallocate = [](pointer_t<void>& pointer, size_t bytes) -> bool
+                {
+                    return false; // this allocator_t doesn't reallocate.
+                };
+
+                auto deallocate = [](pointer_t<void>& pointer) -> bool
+                {
+                    return false; // this allocator_t doesn't deallocate.
+                };
+
+                const allocator_t my_heap = allocator_t(allocate, reallocate, deallocate, false);
+                NERA_ASSERT(my_heap.allocate == allocate);
+                NERA_ASSERT(my_heap.reallocate == reallocate);
+                NERA_ASSERT(my_heap.deallocate == deallocate);
+
+                pointer_t<uint8_t> u8s;
+                NERA_ASSERT(my_heap.allocate(u8s, sizeof(uint8_t) * 2));
+                NERA_ASSERT(u8s.data == reinterpret_cast<uint8_t*>(&heap[0]));
+                NERA_ASSERT(u8s.bytes == sizeof(uint8_t) * 2);
+
+                pointer_t<uint16_t> u16s;
+                NERA_ASSERT(my_heap.allocate(u16s, sizeof(uint16_t) * 3));
+                NERA_ASSERT(u16s.data == reinterpret_cast<uint16_t*>(&heap[u8s.bytes]));
+                NERA_ASSERT(u16s.bytes == sizeof(uint16_t) * 3);
+
+                pointer_t<uint32_t> u32s;
+                NERA_ASSERT(my_heap.allocate(u32s, sizeof(uint32_t) * 4));
+                NERA_ASSERT(u32s.data == reinterpret_cast<uint32_t*>(&heap[u8s.bytes + u16s.bytes]));
+                NERA_ASSERT(u32s.bytes == sizeof(uint32_t) * 4);
+
+                pointer_t<uint64_t> u64s;
+                NERA_ASSERT(my_heap.allocate(u64s, sizeof(uint64_t) * 5));
+                NERA_ASSERT(u64s.data == reinterpret_cast<uint64_t*>(&heap[u8s.bytes + u16s.bytes + u32s.bytes]));
+                NERA_ASSERT(u64s.bytes == sizeof(uint64_t) * 5);
+
+                pointer_t<byte_t> fail;
+                NERA_ASSERT(my_heap.allocate(fail, sizeof(byte_t)) ==  false);
+                NERA_ASSERT(fail.data == nullptr);
+                NERA_ASSERT(fail.bytes == 0);
+
+                u8s.data[0] = 1;
+                u8s.data[1] = 2;
+
+                u16s.data[0] = 3;
+                u16s.data[1] = 4;
+                u16s.data[2] = 5;
+
+                u32s.data[0] = 6;
+                u32s.data[1] = 7;
+                u32s.data[2] = 8;
+                u32s.data[3] = 9;
+
+                u64s.data[0] = 10;
+                u64s.data[1] = 11;
+                u64s.data[2] = 12;
+                u64s.data[3] = 13;
+                u64s.data[4] = 14;
+
+                // we don't want allocated sectors overwriting each other
+                NERA_ASSERT(u8s.data[0] == 1);
+                NERA_ASSERT(u8s.data[1] == 2);
+
+                NERA_ASSERT(u16s.data[0] == 3);
+                NERA_ASSERT(u16s.data[1] == 4);
+                NERA_ASSERT(u16s.data[2] == 5);
+
+                NERA_ASSERT(u32s.data[0] == 6);
+                NERA_ASSERT(u32s.data[1] == 7);
+                NERA_ASSERT(u32s.data[2] == 8);
+                NERA_ASSERT(u32s.data[3] == 9);
+
+                NERA_ASSERT(u64s.data[0] == 10);
+                NERA_ASSERT(u64s.data[1] == 11);
+                NERA_ASSERT(u64s.data[2] == 12);
+                NERA_ASSERT(u64s.data[3] == 13);
+                NERA_ASSERT(u64s.data[4] == 14);
+
+                /*for (uint8_t* ptr = u8s.data, *end = ptr + u8s.count(); ptr < end; ptr += 1) {
+                    printf("%u ", *ptr);
+                }
+                for (uint16_t* ptr = u16s.data, *end = ptr + u16s.count(); ptr < end; ptr += 1) {
+                    printf("%u ", *ptr);
+                }
+                for (uint32_t* ptr = u32s.data, *end = ptr + u32s.count(); ptr < end; ptr += 1) {
+                    printf("%u ", *ptr);
+                }
+                for (uint64_t* ptr = u64s.data, *end = ptr + u64s.count(); ptr < end; ptr += 1) {
+                    printf("%llu ", *ptr);
+                }
+                printf("\n");*/
+            }
+        );
+
+        stop_tests();
     }
 
     void memory()
@@ -1013,7 +1185,7 @@ namespace nera { namespace tests {
             printf("%i", ints[index]);
         } printf("\n");
 
-        if (false) {
+        if (true) {
             uint32_t num = 0;
             pointer_t<uint32_t> pointer(num);
             constexpr uint32_t max = static_cast<uint16_t>(~0) + 1;
@@ -1095,27 +1267,27 @@ namespace nera { namespace tests {
         divider(); tests::pointer_data_t(); get_one_char();
         divider(); tests::pointer_void_t(); get_one_char();
         divider(); tests::pointer_friend(); get_one_char();
-        //divider(); tests::allocator(); get_one_char();
+        divider(); tests::allocator(); get_one_char();
         //divider(); tests::memory(); get_one_char();
         //divider(); tests::vector(); get_one_char();
         //divider(); tests::hasher(); get_one_char();
         //divider(); tests::hashmap(); get_one_char();
 
-        divider(); printf("success!\n");
+        divider(); printf("success!\n"); get_one_char();
     }
 
     void automatic_mode()
     {
-        tests::utils();
+        //tests::utils();
         tests::utils_bits();
         tests::pointer_data_t();
         tests::pointer_void_t();
         tests::pointer_friend();
         tests::allocator();
-        tests::memory();
-        tests::vector();
-        tests::hasher();
-        tests::hashmap();
+        //tests::memory();
+        //tests::vector();
+        //tests::hasher();
+        //tests::hashmap();
 
         printf("\nsuccess!\n");
     }

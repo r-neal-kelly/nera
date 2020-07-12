@@ -18,7 +18,7 @@ namespace nera {
         printf("    in func: %s\n", function);
         printf("    in file: %s\n", file);
         printf("    on line: %i\n", line);
-        //getc(stdin);
+        getc(stdin);
         exit(EXIT_FAILURE);
     }
 

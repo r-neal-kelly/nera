@@ -23,7 +23,12 @@ namespace nera {
         vector_t(size_t reserve_count);
         vector_t(const allocator_t& allocator);
         vector_t(const allocator_t& allocator, size_t reserve_count);
-        vector_t(vector_t<data_t>&& to_move);
+
+        vector_t(const vector_t<data_t>& other);
+        vector_t(vector_t<data_t>&& other) noexcept;
+        vector_t<data_t>& operator=(const vector_t<data_t>& other);
+        vector_t<data_t>& operator=(vector_t<data_t>&& other) noexcept;
+
         ~vector_t();
 
         bool reserve(size_t count);
@@ -35,6 +40,7 @@ namespace nera {
         bool push(data_t&& in_element);
         bool pull(data_t& out_element);
         bool pop();
+        bool pop_all();
         size_t find(data_t& element);
         bool clone(vector_t<data_t>& out_vector);
 

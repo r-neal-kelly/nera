@@ -30,6 +30,7 @@ namespace nera {
                     reallocate_f reallocate,
                     deallocate_f deallocate,
                     bool initializes_to_zero);
+        allocator_t(const allocator_t& allocator);
     };
 
 }

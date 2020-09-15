@@ -7,6 +7,8 @@
 #include <chrono>
 
 #include "main.h"
+#include "nera/charcoder.inl"
+#include "nera/string.inl"
 
 namespace nera { namespace tests {
 
@@ -1242,6 +1244,17 @@ namespace nera { namespace tests {
         } printf("\n");
     }
 
+    void ascii()
+    {
+        ascii_t ascii("Hello, World");
+
+        for (size_t idx = 0, count = ascii.count; idx < count; idx += 1) {
+            printf("%c\n", static_cast<char>(ascii[idx]));
+        }
+
+        printf("my string: %s, count: %zu", static_cast<const char*>(ascii), ascii.count);
+    }
+
     inline void divider()
     {
         for (size_t idx = 0; idx < 64; idx += 1) {
@@ -1272,6 +1285,7 @@ namespace nera { namespace tests {
         //divider(); tests::vector(); get_one_char();
         //divider(); tests::hasher(); get_one_char();
         //divider(); tests::hashmap(); get_one_char();
+        divider(); tests::ascii(); get_one_char();
 
         divider(); printf("success!\n"); get_one_char();
     }
@@ -1288,6 +1302,7 @@ namespace nera { namespace tests {
         //tests::vector();
         //tests::hasher();
         //tests::hashmap();
+        tests::ascii();
 
         printf("\nsuccess!\n");
     }

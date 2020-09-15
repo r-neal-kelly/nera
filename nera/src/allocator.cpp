@@ -166,4 +166,12 @@ namespace nera {
     {
     }
 
+    allocator_t::allocator_t(const allocator_t& allocator) :
+        allocate(allocator.allocate),
+        reallocate(allocator.reallocate),
+        deallocate(allocator.deallocate),
+        initializes_to_zero(allocator.initializes_to_zero)
+    {
+    }
+
 }

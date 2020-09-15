@@ -111,7 +111,7 @@ namespace nera {
     }
 
     template <typename data_t>
-    auto_memory_t<data_t>::auto_memory_t(auto_memory_t<data_t>&& to_move) :
+    auto_memory_t<data_t>::auto_memory_t(auto_memory_t<data_t>&& to_move) noexcept :
         pointer(std::move(to_move.pointer)), allocator(to_move.allocator)
     {
     }
@@ -124,10 +124,9 @@ namespace nera {
     }
 
     template <typename data_t>
-    auto_memory_t<data_t>& auto_memory_t<data_t>::operator=(auto_memory_t<data_t>&& to_move)
+    auto_memory_t<data_t>& auto_memory_t<data_t>::operator=(auto_memory_t<data_t>&& to_move) noexcept
     {
         pointer = std::move(to_move.pointer);
-        allocator = to_move.allocator;
         return *this;
     }
     

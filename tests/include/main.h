@@ -11,6 +11,8 @@
 #include "nera/vector.h"
 #include "nera/hasher.h"
 #include "nera/hashmap.h"
+#include "nera/charcoder.h"
+#include "nera/string.h"
 
 namespace nera { namespace tests {
 

@@ -41,11 +41,41 @@ namespace nera {
     }*/
 
     template <typename data_t>
-    vector_t<data_t>::vector_t(vector_t<data_t>&& to_move) :
-        memory(std::move(to_move.memory)),
-        count(std::exchange(to_move.count, 0)),
-        grow_rate(std::exchange(to_move.grow_rate, DEFAULT_GROW_RATE))
+    inline vector_t<data_t>::vector_t(const vector_t<data_t>& other) :
+        memory(other.memory),
+        count(other.count),
+        grow_rate(other.grow_rate)
     {
+    }
+
+    template <typename data_t>
+    inline vector_t<data_t>::vector_t(vector_t<data_t>&& other) noexcept :
+        memory(std::move(other.memory)),
+        count(std::exchange(other.count, 0)),
+        grow_rate(std::exchange(other.grow_rate, DEFAULT_GROW_RATE))
+    {
+    }
+
+    template <typename data_t>
+    inline vector_t<data_t>& vector_t<data_t>::operator=(const vector_t<data_t>& other)
+    {
+        if (&other != this) {
+            memory = other.memory;
+            count = other.count;
+            grow_rate = other.grow_rate;
+        }
+        return *this;
+    }
+
+    template <typename data_t>
+    inline vector_t<data_t>& vector_t<data_t>::operator=(vector_t<data_t>&& other) noexcept
+    {
+        if (&other != this) {
+            memory = std::move(other.memory);
+            count = std::exchange(other.count, 0);
+            grow_rate = std::exchange(other.grow_rate, DEFAULT_GROW_RATE);
+        }
+        return *this;
     }
 
     template <typename data_t>
@@ -138,6 +168,17 @@ namespace nera {
     {
         if (count > 0) {
             count -= 1;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    template <typename data_t>
+    bool vector_t<data_t>::pop_all()
+    {
+        if (count > 0) {
+            count = 0;
             return true;
         } else {
             return false;
